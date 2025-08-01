@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -18,10 +19,20 @@ public class Donation {
 
     private String donorName;
     private int amount;
+    @Column(name = "created_at")
     private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "intern_id")
     @JsonIgnore
     private Intern intern;
+
+    @PrePersist
+    public void setDefaultDate() {
+        if (this.date == null) {
+            this.date = LocalDate.now();
+        }
+    }
+
 }
+
