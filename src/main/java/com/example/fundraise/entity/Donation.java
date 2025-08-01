@@ -1,4 +1,6 @@
 package com.example.fundraise.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,5 +22,6 @@ public class Donation {
 
     @ManyToOne
     @JoinColumn(name = "intern_id")
+    @JsonIgnore
     private Intern intern;
 }

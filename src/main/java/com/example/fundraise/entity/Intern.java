@@ -1,4 +1,5 @@
 package com.example.fundraise.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 

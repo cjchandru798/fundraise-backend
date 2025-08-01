@@ -25,11 +25,11 @@ public class InternDashboardService {
     private final JwtUtil jwtUtil;
 
     public InternDashboardResponse getDashboard(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
+        String token = extractToken(request);
         String email = jwtUtil.extractEmail(token);
 
         Intern intern = internRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Intern not found"));
+                .orElseThrow(() -> new RuntimeException("Intern not found with email: " + email));
 
         List<Donation> donations = donationRepository.findByIntern(intern);
 
@@ -48,14 +48,22 @@ public class InternDashboardService {
         );
     }
 
+    private String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        throw new RuntimeException("Missing or invalid Authorization header");
+    }
+
     private String getDynamicBadge(int total) {
         List<Milestone> milestones = milestoneRepository.findAll();
-        milestones.sort(Comparator.comparingInt(Milestone::getAmount)); // ascending
+        milestones.sort(Comparator.comparingInt(Milestone::getAmount));
 
         String badge = "🕐 Keep Going!";
-        for (Milestone m : milestones) {
-            if (total >= m.getAmount()) {
-                badge = m.getLabel();
+        for (Milestone milestone : milestones) {
+            if (total >= milestone.getAmount()) {
+                badge = milestone.getLabel();
             } else {
                 break;
             }
