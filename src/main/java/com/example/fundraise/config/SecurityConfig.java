@@ -28,7 +28,9 @@ public class SecurityConfig {
                                 "/api/donate/**",          // 👈 necessary for public donation
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/swagger-ui/**"
+                                "/swagger-ui/**",
+                                "/api/leaderboard",
+                                "/api/admin/login"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
