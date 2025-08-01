@@ -2,6 +2,8 @@ package com.example.fundraise.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -24,4 +26,7 @@ public class Intern {
 
     private String city;
     private String college;
+    @OneToMany(mappedBy = "intern", cascade = CascadeType.ALL)
+    private List<Donation> donations;
+
 }
