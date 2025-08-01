@@ -15,14 +15,14 @@ public class FundraiseApplication {
 		SpringApplication.run(FundraiseApplication.class, args);
 	}
 
-	// ✅ Automatically create admin user on app start if not already in DB
 	@Bean
 	CommandLineRunner createAdmin(AdminRepository repo, PasswordEncoder encoder) {
 		return args -> {
 			if (repo.findByEmail("admin@org.com").isEmpty()) {
-				Admin admin = new Admin(null, "admin@org.com", encoder.encode("admin123"), "Admin User");
+				Admin admin = new Admin("admin@org.com", encoder.encode("admin123"), "Main Admin");
+				admin.setSuperAdmin(true); // ✅ explicitly set if needed
 				repo.save(admin);
-				System.out.println("✅ Admin user created: admin@org.com / admin123");
+				System.out.println("✅ Super Admin user created: admin@org.com / admin123");
 			} else {
 				System.out.println("ℹ️ Admin user already exists.");
 			}
